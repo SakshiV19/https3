@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <alerts>
-        <fullName>Sent_email_when_Run_all_Test</fullName>
-        <description>Sent email when Run all Test</description>
-        <protected>false</protected>
-        <recipients>
-            <recipient>vsakshi-neha-devorg@copado.com</recipient>
-            <type>user</type>
-        </recipients>
-        <senderType>CurrentUser</senderType>
-        <template>Copado_Deployer/NewApexTestResultSummary</template>
-    </alerts>
+    <rules>
+        <fullName>Apex Test result</fullName>
+        <active>true</active>
+        <formula>TRUE</formula>
+        <triggerType>onCreateOnly</triggerType>
+        <workflowTimeTriggers>
+            <actions>
+                <name>Sent_email_when_Run_all_Test</name>
+                <type>Alert</type>
+            </actions>
+            <offsetFromField>Apex_Test_Result__c.CreatedDate</offsetFromField>
+            <timeLength>0</timeLength>
+            <workflowTimeTriggerUnit>Hours</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+    </rules>
 </Workflow>
