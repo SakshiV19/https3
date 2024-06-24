@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexTestSuite xmlns="http://soap.sforce.com/2006/04/metadata">
+    <testClassName>CancelExecutionServiceImplTest</testClassName>
+    <testClassName>CancelFunctionServiceImplTest</testClassName>
+    <testClassName>CheckStatusActionTest</testClassName>
+    <testClassName>CopadoEventGeneratorTest</testClassName>
+    <testClassName>DeploymentWizardExtensionTest</testClassName>
+    <testClassName>FunctionExecutionServiceImplTest</testClassName>
+    <testClassName>FunctionResultMonitorTest</testClassName>
+    <testClassName>FunctionStatusServiceImplTest</testClassName>
+    <testClassName>LoggerTest</testClassName>
+    <testClassName>MCResultsTest</testClassName>
+    <testClassName>ResultMonitorTest</testClassName>
+    <testClassName>RunCopadoFunctionTest</testClassName>
+    <testClassName>RunTestsActionTest</testClassName>
+    <testClassName>RunTestServiceImplTest</testClassName>
+    <testClassName>RunTestsInExtensionTest</testClassName>
+</ApexTestSuite>

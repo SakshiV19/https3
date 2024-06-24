@@ -1,0 +1,33 @@
+.historyBtn {
+    cursor: pointer;
+    -webkit-transition: -webkit-transform 0.2s;
+    -ms-transition: -ms-transform 0.2s;
+    transition: transform 0.2s;
+}
+
+.historyBtn-open {
+    -ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+li .slds-timeline__item_expandable.success::before {
+    background: #2e844a;
+}
+
+li .slds-timeline__item_expandable.failed::before {
+    background: #ea001e;
+}
+
+.menu {
+    width: 20px;
+}
+
+.spinner {
+    left: 2.5rem;
+    top: 0;
+}
+
+.slds-timeline__trigger:hover {
+    background-color: #fff;
+}

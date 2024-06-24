@@ -1,0 +1,158 @@
+<template>
+    <li>
+        <div class="slds-timeline__item_expandable step">
+            <div class="slds-media">
+
+                <div class="slds-media__figure">
+                    <lightning-icon
+                        if:false={step.isNotStarted}
+                        icon-name="utility:chevronright"
+                        size="x-small"
+                        onclick={toggleHistory}
+                        class="slds-var-m-right_x-small historyBtn">
+                    </lightning-icon>
+                    <div if:true={step.isNotStarted} class="slds-var-m-left_large slds-show_inline"></div>
+                    <div class="slds-icon_container slds-timeline__icon slds-theme_default">
+                        <c-copadocore-custom-icon
+                            if:true={step.isNotStarted}
+                            icon-name="utility:clock"
+                            size="small"
+                            color={customIconColor}
+                            alternative-text={result.status}>
+                        </c-copadocore-custom-icon>
+                        <template if:true={step.isInProgress}>
+                            <c-copadocore-custom-icon
+                                if:true={step.isManualTask}
+                                size="small"
+                                color={customIconColor}
+                                icon-name="utility:user"
+                                alternative-text={label.STEP_TYPE_MANUAL_TASK}>
+                            </c-copadocore-custom-icon>
+                            <div if:false={step.isManualTask} class="slds-var-m-left_large">
+                                <div class="spinner slds-is-absolute">
+                                    <div class="slds-spinner_container">
+                                        <div
+                                            class="slds-spinner slds-spinner_small slds-spinner_brand slds-var-m-top_small">
+                                            <span class="slds-assistive-text">{label.LOADING}</span>
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <lightning-icon
+                            if:true={step.isFinished}
+                            size="small"
+                            icon-name={finishedIconName}
+                            variant={finishedIconVariant}>
+                        </lightning-icon>
+                    </div>
+                </div>
+
+                <div class="slds-media__body">
+                    <div class="slds-grid slds-grid_align-spread slds-timeline__trigger">
+                        <div class="slds-grid slds-grid_vertical-align-center slds-truncate_container_75 slds-no-space">
+                            <h3 class="slds-truncate">
+                                <a href={step.link} target="_blank">
+                                    <strong>{step.name}</strong>
+                                </a>
+                            </h3>
+                        </div>
+                        <div class="slds-timeline__actions slds-timeline__actions_inline">
+                            <lightning-formatted-date-time
+                                if:true={result}
+                                class="slds-timeline__date"
+                                value={result.createdDate}
+                                year="2-digit"
+                                month="numeric"
+                                day="numeric"
+                                hour="2-digit"
+                                minute="2-digit"
+                                second="2-digit">
+                            </lightning-formatted-date-time>
+                            <div class="menu">
+                                <lightning-button-menu
+                                    if:true={step.isInProgress}
+                                    menu-alignment="auto"
+                                    icon-size="x-small"
+                                    onselect={handleMenuSelect}>
+                                    <lightning-menu-item
+                                        if:true={step.isManualTask}
+                                        value={label.UPDATE_MANUAL_TASK_BUTTON}
+                                        label={label.UPDATE_MANUAL_TASK_BUTTON}>
+                                    </lightning-menu-item>
+                                </lightning-button-menu>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-var-m-horizontal_xx-small">
+                        <div class="slds-var-m-vertical_xx-small">{step.status}</div>
+                        <div class="slds-var-m-vertical_xx-small">
+                            <span class="slds-var-m-right_large">{label.TYPE}: {step.type}</span>
+                            <span if:true={result}>Step result: <a href={step.result} target="_blank">{result.name}</a></span>
+                        </div>
+                    </div>
+
+                    <article
+                        if:true={result}
+                        class="slds-box slds-timeline__item_details slds-theme_shade slds-var-m-top_x-small slds-var-m-horizontal_xx-small slds-var-p-around_medium">
+                        <div class="slds-text-align_right">
+                            <lightning-button-icon
+                                if:true={step.isInProgress}
+                                icon-name="utility:refresh"
+                                title="Update Step Progress"
+                                onclick={refreshManually}
+                                tooltip="Update Step Progress">
+                            </lightning-button-icon>
+                        </div>
+                        <template for:each={result.histories} for:item="history">
+                            <div key={history.createdDate} class="slds-var-m-bottom_small">
+                                <template if:false={step.isManualTask}>
+                                    <span>
+                                        <lightning-formatted-date-time
+                                            value={history.createdDate}
+                                            year="2-digit"
+                                            month="numeric"
+                                            day="numeric"
+                                            hour="2-digit"
+                                            minute="2-digit"
+                                            second="2-digit">
+                                        </lightning-formatted-date-time>
+                                    </span>
+                                    <span class="slds-var-m-left_large">{history.value}</span>
+                                </template>
+                                <template if:true={step.isManualTask}>
+                                    <div if:true={step.isInProgress}>{label.STATUS}: {label.PENDING}</div>
+                                    <div if:false={step.isInProgress}>{label.STATUS}: {result.status}</div>
+                                    <div class="slds-var-m-top_large">{history.value}</div>
+                                </template>
+                            </div>
+                        </template>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </li>
+
+    <c-copadocore-modal if:true={step.isManualTask} title={label.STEP_TYPE_MANUAL_TASK} hide-close>
+        <template if:true={step}>
+            <span slot="title"> {label.Update_Manual_Task} </span>
+            <slot class="slds-align_absolute-center">
+                <c-complete-manual-task record-id={step.id} onfinishupdate={hideModal} is-not-action-button>
+                </c-complete-manual-task>
+            </slot>
+            <span slot="footer">
+                <lightning-button label={label.CANCEL} title={label.CANCEL} variant="neutral" onclick={hideModal}>
+                </lightning-button>
+                <lightning-button
+                    class="slds-var-m-left_x-small"
+                    label={label.SAVE}
+                    title={label.SAVE}
+                    variant="brand"
+                    onclick={saveManualTask}>
+                </lightning-button>
+            </span>
+        </template>
+    </c-copadocore-modal>
+</template>

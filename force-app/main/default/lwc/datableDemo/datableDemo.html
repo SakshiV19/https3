@@ -1,0 +1,51 @@
+<template>
+    <div class="slds-m-around_medium">
+        <p>Test Name: {name}</p>
+    </div>
+    <c-datatable-container
+        icon-name={iconName}
+        has-body="true"
+        has-footer="false"
+        enable-default-search={enableSearch}
+        rows={allRows}
+        columns={columns}
+        onsearch={handleApplySearch}
+        enable-quick-filter="true"
+        onclearsearch={handleClearSearch}
+    >
+        <span slot="title">{title}</span>
+        <span slot="actions">
+            <lightning-button label="View" title="View" class="slds-m-left_xx-small" onclick={handleViewInKanban}></lightning-button>
+        </span>
+
+        <span slot="tableActions">
+            <lightning-button-icon
+                icon-name="utility:refresh"
+                title="Refresh"
+                class="slds-m-left_xx-small"
+                onclick={handleRefresh}
+            ></lightning-button-icon>
+        </span>
+
+        <span slot="datatable">
+            <div style="height: calc(100vh - 510px)">
+                <lightning-datatable
+                    key-field={keyField}
+                    columns={columns}
+                    data={data}
+                    default-sort-direction={defaultSortDirection}
+                    sorted-direction={sortDirection}
+                    sorted-by={sortedBy}
+                    onsort={onHandleSort}
+                    show-row-number-column
+                    enable-infinite-loading
+                >
+                </lightning-datatable>
+            </div>
+        </span>
+
+        <span slot="footer" if:true={hasFooter}>
+            <a title="View All" class="slds-m-left_x-small" onclick={handleViewAll}>'View All'</a>
+        </span>
+    </c-datatable-container>
+</template>

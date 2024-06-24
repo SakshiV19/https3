@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_First_Promotion__c</fullName>
+    <externalId>false</externalId>
+    <formula>CreatedDate == User_Story__r.First_Promoted_User_Story__c &amp;&amp; User_Story__r.Environment__c ==  Promotion__r.Source_Environment__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Is First Promotion</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

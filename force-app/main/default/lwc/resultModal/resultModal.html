@@ -1,0 +1,111 @@
+<template>
+    <c-copadocore-modal size={modalSize} onmodalclose={handleClickClose}>
+        <span slot="title">{modalHeader}</span>
+
+        <slot class="slds-align_absolute-center">
+            <div class="slds-size_full slds-is-relative slds-p-horizontal_x-small">
+
+                <lightning-spinner if:true={isLoading} variant="brand" size="large"></lightning-spinner>
+
+                <div class={bannerClass} role="status">
+                    <div class="slds-media__figure">
+                        <lightning-icon class={iconClass} icon-name={iconName} size="small"></lightning-icon>
+                    </div>
+
+                    <div class="slds-media__body">
+                        <span>{label.STATUS}: {resultStatus}</span>
+                        <a href={resultUrl}>
+                            <span class="slds-float_right clickable">{viewResultLabel}</span>
+                        </a>
+                    </div>
+                </div>
+
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12">
+                        <lightning-record-view-form record-id={recordId} object-api-name={schema.RESULT_OBJ.objectApiName}>
+
+                            <div class="slds-grid slds-gutters slds-var-p-around_x-small">
+                                <div class="slds-col slds-size_1-of-2 slds-var-p-around_x-small">
+                                    <lightning-output-field class="slds-form-element_readonly" field-name= {schema.RESULT_PROGRESS_STATUS.fieldApiName} ></lightning-output-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-var-p-around_x-small">
+                                    <lightning-output-field class="slds-form-element_readonly" field-name= {schema.RESULT_EXTERNAL_RESULT_LINK.fieldApiName} ></lightning-output-field>
+                                </div>
+                            </div>
+
+                            <div class="slds-grid slds-gutters slds-var-p-around_x-small" lwc:if={showErrorFields}>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-output-field class="slds-form-element_readonly" field-name= {schema.RESULT_ERROR_MSG.fieldApiName} ></lightning-output-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-output-field class="slds-form-element_readonly" field-name= {schema.RESULT_ERROR_CODE.fieldApiName} ></lightning-output-field>
+                                </div>
+                            </div>
+
+                        </lightning-record-view-form>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+                <div class="slds-card slds-var-p-around_medium">
+                    <lightning-tabset variant="scoped">
+
+                        <lightning-tab label={label.EXECUTION_OUTCOME}>
+                            <div style="width: 100%; height: 300px; overflow: hidden">
+                                <iframe
+                                    src={iframeSrc}
+                                    style="position: relative; top: -10px; border: 0"
+                                    height="300px"
+                                    width="100%"
+                                ></iframe>
+                            </div>
+                        </lightning-tab>
+
+                        <lightning-tab label={label.LOGS}>
+                            <c-result-log-visualizer record-id={recordId}></c-result-log-visualizer>
+                        </lightning-tab>
+
+                        <lightning-tab lwc:if={hasSubJob} label={stepsTabHeader}>
+                            <c-datatable-container
+                                icon-name="standard:custom"
+                                has-body="true"
+                                rows={subJobSteps}
+                                columns={columns}
+                            >
+                                <span slot="title">{label.JOB_STEPS} ({stepCount})</span>
+
+                                <span slot="actions">
+                                    <lightning-button-icon
+                                        icon-name="utility:refresh"
+                                        title={label.REFRESH}
+                                        class="slds-var-m-left_xx-small"
+                                        onclick={handleRefresh}>
+                                        <label>{label.REFRESH}</label>
+                                    </lightning-button-icon>
+                                </span>
+
+                                <span slot="datatable">
+                                    <!-- sldsValidatorIgnoreNextLine -->
+                                    <lightning-datatable
+                                        key-field="id"
+                                        data={subJobSteps}
+                                        columns={columns}
+                                        show-row-number-column
+                                        hide-checkbox-column
+                                        onsort={handleSort}
+                                        sorted-direction={sortDirection}
+                                        sorted-by={sortedBy}
+                                    ></lightning-datatable>
+                                </span>
+                            </c-datatable-container>
+                        </lightning-tab>
+                    </lightning-tabset>
+                </div>
+
+            </div>
+        </slot>
+
+        <span slot="footer">
+            <lightning-button label={label.CLOSE} title={label.CLOSE} variant="neutral" onclick={handleClickClose}></lightning-button>
+        </span>
+    </c-copadocore-modal>
+</template>

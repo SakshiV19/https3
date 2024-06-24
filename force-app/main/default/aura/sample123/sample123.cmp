@@ -1,0 +1,6 @@
+<aura:component >
+    <aura:attribute name="recordId" type="String" />
+	Hello sample123 
+    
+    recordId: {!v.recordId}
+</aura:component>

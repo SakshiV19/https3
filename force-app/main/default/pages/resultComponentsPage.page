@@ -1,0 +1,30 @@
+<apex:page standardController="Result__c" id="ResultComponents" lightningStylesheets="true" showHeader="false">
+    <apex:includeLightning />
+
+    <div id="auraContainer">
+    </div>
+    <script>
+        $Lightning.use("c:ResultComponentsApp", function() {
+            $Lightning.createComponent(
+                "c:dynamicResultViewer",
+                { recordId: "{!$CurrentPage.parameters.recordId}" },
+                "auraContainer",
+                function(cmp) {}
+            );
+            $Lightning.createComponent(
+                "c:dynamicUISectionContainer",
+                { locationId: "{!$CurrentPage.parameters.locationId}",
+                  requiredInformation: "{!$CurrentPage.parameters.requiredInformation}"
+                },
+                "auraContainer",
+                function(cmp) {console.log('dynamic ui msg')}
+            );
+            $Lightning.createComponent(
+                "c:resultViewerPublishMessage",
+                { recordId: "{!$CurrentPage.parameters.recordId}" },
+                "auraContainer",
+                function(cmp) { console.log('publisher msg')}
+            );
+        });
+    </script>
+</apex:page>

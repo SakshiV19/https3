@@ -1,0 +1,86 @@
+<template>
+    <c-platform-event-subscriber channel={eventChannel} onmessage={handlePlatformEvent}></c-platform-event-subscriber>
+
+    <lightning-card if:false={job}>
+
+
+        <c-copadocore-illustration name="error:not_available_in_lightning" size="small" message={noJobTitle}>
+            <p slot="body">{noJobMessage}</p>
+        </c-copadocore-illustration>
+        
+    </lightning-card>
+
+    <lightning-card if:true={job} title={job.title} icon-name="standard:custom">
+        <lightning-button-group slot="actions">
+            <lightning-button label={label.View_Job_Execution} onclick={navigateToJobExecution}> </lightning-button>
+            
+        </lightning-button-group>
+
+        <div if:false={job.stepDetails.length} class="slds-var-p-horizontal_xxx-small">
+            <c-copadocore-illustration name="custom:no_task" size="small" message={noStepsMessage}>
+                <p slot="body">
+                    <template if:true={job.template}>
+                        {label.No_Job_Step_Message} <a href={job.templateLink}>Add Job Steps now.</a>
+                    </template>
+                    <template if:false={job.template}>{label.No_Job_Step_for_Job_Execution}</template>
+                </p>
+            </c-copadocore-illustration>
+        </div>
+
+        <template if:true={job.stepDetails.length}>
+            <div class="timeline-container slds-is-relative">  
+                <lightning-spinner if:true={isLoading}> </lightning-spinner>
+
+                <ul class="slds-timeline slds-var-m-left_small" id="jobsteps">
+                    <template for:each={job.stepDetails} for:item="step">
+                        <c-step-result
+                            key={step.id}
+                            job-step={step}
+                            onuserworking={setUserWorking}
+                            onrefresh={refreshManually}>
+                        </c-step-result>
+                    </template>
+                </ul>
+                <span class="gradient-mask"></span>
+            </div>
+
+            <template if:false={job.isUnfinished}>
+                <lightning-layout
+                    slot="footer"
+                    class="slds-text-align_left slds-var-p-bottom_small"
+                    horizontal-align="spread"
+                    multiple-rows>
+                    <lightning-layout-item size="12" class="slds-var-p-bottom_x-small">
+                        <b>{label.Job_Execution_Result}</b>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="7">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <lightning-icon icon-name={job.iconName} variant={job.iconVariant} size="small">
+                                </lightning-icon>
+                            </div>
+                            <a href="javascript:void(0)" onclick={navigateToJobExecution}>
+                                <b>{label.Job_Execution_Status}: {job.status}</b>
+                            </a>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="5" class="slds-text-align_right">
+                        <lightning-formatted-date-time
+                            value={job.lastModifiedDate}
+                            year="2-digit"
+                            month="numeric"
+                            day="numeric"
+                            hour="2-digit"
+                            minute="2-digit"
+                            second="2-digit">
+                        </lightning-formatted-date-time>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="1"> </lightning-layout-item>
+                    <lightning-layout-item size="11"><p>{job.message}</p></lightning-layout-item>
+                </lightning-layout>
+            </template>
+
+           
+        </template>
+    </lightning-card>
+</template>

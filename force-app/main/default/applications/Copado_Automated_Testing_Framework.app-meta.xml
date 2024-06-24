@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0070D2</headerColor>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
+    <label>Copado Automated Testing Framework</label>
+    <navType>Standard</navType>
+    <tabs>Result__c</tabs>
+    <tabs>Test__c</tabs>
+    <tabs>Promoted_User_Story__c</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>Copado_Automated_Testing_Framework_UtilityBar</utilityBar>
+</CustomApplication>
